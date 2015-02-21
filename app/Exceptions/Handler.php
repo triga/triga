@@ -41,12 +41,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($this->isHttpException($e)) {
-            $this->notifyDevelopers($e, $request->url(), '404');
-
             return $this->renderHttpException($e);
         } else {
-            $this->notifyDevelopers($e, $request->url(), 'general');
-
             return $this->renderExceptionWithWhoops($e);
         }
     }
@@ -67,23 +63,6 @@ class Handler extends ExceptionHandler
             $e->getStatusCode(),
             $e->getHeaders()
         );
-    }
-
-    /**
-     * Sends an email to the developer(s) with the error report.
-     *
-     * @param Exception $exception
-     * @param string $url
-     * @param string $type
-     */
-    protected function notifyDevelopers(Exception $exception, $url, $type)
-    {
-        $report = (new CrashReport())->setErrorUrl($url)
-            ->setException($exception)
-            ->setSessionData(\Session::all())
-            ->getMessage();
-
-        (new Mailer($report))->send($type);
     }
 
 }
