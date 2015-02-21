@@ -139,11 +139,14 @@ return [
 		/*
 		 * Application Service Providers...
 		 */
+		'TwigBridge\ServiceProvider',
+
 		'Triga\Providers\AppServiceProvider',
 		'Triga\Providers\BusServiceProvider',
-		'Triga\Providers\ConfigServiceProvider',
 		'Triga\Providers\EventServiceProvider',
 		'Triga\Providers\RouteServiceProvider',
+
+		'Triga\Providers\ConfigServiceProvider',
 
 	],
 
@@ -192,6 +195,8 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+
+		'Twig' => 'TwigBridge\Facade\Twig',
 
 	],
 
