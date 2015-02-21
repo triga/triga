@@ -3,6 +3,9 @@
 use Domain\Model\User;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Creates the root account.
+ */
 class CreateRootAccount extends Migration {
 
 	/**
