@@ -8,8 +8,6 @@ class DashboardController extends AppController
 {
 
     /**
-     * Display a listing of the resource.
-     *
      * @return Response
      */
     public function index()

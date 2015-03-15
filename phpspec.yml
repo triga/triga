@@ -1,5 +1,9 @@
 suites:
-    main:
-        namespace: Triga
-        psr4_prefix: Triga
-        src_path: app
+#    main:
+#        namespace: Triga
+#        psr4_prefix: Triga
+#        src_path: app
+    source:
+        namespace: Source
+        psr4_prefix: Source
+        src_path: src

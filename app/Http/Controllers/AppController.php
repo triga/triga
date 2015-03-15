@@ -2,7 +2,8 @@
 
 use Illuminate\View\Factory as ViewFactory;
 
-class AppController extends Controller {
+class AppController extends Controller
+{
 
     protected $layout = '_layouts.base';
 
@@ -16,7 +17,8 @@ class AppController extends Controller {
         $this->view = $view;
     }
 
-    protected function render(){
+    protected function render()
+    {
         return $this->view->make($this->layout);
     }
 
