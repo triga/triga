@@ -15,4 +15,27 @@ class QueryBuilderSpec extends ObjectBehavior
 
         $this->getQuery()->shouldReturn('SELECT email FROM users');
     }
+
+    function it_sets_query_sorting()
+    {
+        $this->beConstructedWith([
+            'email',
+        ], 'users');
+
+        $this->setSortingColumn('name');
+        $this->setSortingDirection('desc');
+
+        $this->getQuery()->shouldReturn('SELECT email FROM users ORDER BY name DESC');
+    }
+
+    function it_allows_only_proper_sorting()
+    {
+        $this->beConstructedWith([
+            'email',
+        ], 'users');
+
+        $this->setSortingColumn('name');
+
+        $this->shouldThrow('\InvalidArgumentException')->during('setSortingDirection', ['foo']);
+    }
 }
