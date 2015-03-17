@@ -13,6 +13,8 @@ class QueryBuilder
     private $table;
     private $sortBy;
     private $sortDir;
+    private $offset;
+    private $limit;
 
     public function __construct(array $columns, $table)
     {
@@ -25,7 +27,11 @@ class QueryBuilder
         $query = sprintf('SELECT %s FROM %s', join(',', $this->columns), $this->table);
 
         if (false === empty($this->sortBy) && false === empty($this->sortDir)) {
-            $query .= sprintf(' ORDER BY %s %s', $this->sortBy, strtoupper($this->sortDir));
+            $query .= sprintf(' ORDER BY %s %s', $this->sortBy, $this->sortDir);
+        }
+
+        if (false === empty($this->offset) && false === empty($this->limit)) {
+            $query .= sprintf(' LIMIT %d,%d', $this->offset, $this->limit);
         }
 
         return $query;
@@ -47,6 +53,20 @@ class QueryBuilder
         }
 
         $this->sortDir = $dir;
+
+        return $this;
+    }
+
+    public function setOffset($offset)
+    {
+        $this->offset = (int)$offset;
+
+        return $this;
+    }
+
+    public function setLimit($limit)
+    {
+        $this->limit = (int)$limit;
 
         return $this;
     }
