@@ -12,10 +12,22 @@ class UserController extends AppController {
 	public function getIndex(DataGrid $dataGrid)
 	{
         $query = \DB::table('users')
-            ->select('email', 'id')
-            ->where('email', '!=', 'foo@bar.com');
+            ->select('email', 'id');
 
-        $dataGrid->make($query);
+        $dataGrid->query($query);
+
+        $dataGrid->filter('email', function($query, $value) {
+            $query->where('email', '=', $value);
+        });
+
+        $dataGrid->filter('name', function($query, $value) {
+            $query->where(function ($q) use ($value) {
+                $q->where('name', '=', $value);
+                $q->orWhere('lastname', '=', $value);
+            });
+        });
+
+        $dataGrid->make();
 	}
 
 }

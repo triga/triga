@@ -2,6 +2,11 @@
 
 use Illuminate\Database\Query\Builder;
 
+/**
+ * DataGrid query builder. Responsible for building the query to be executed.
+ *
+ * @package Source\DataGrid
+ */
 class QueryBuilder
 {
     const SORT_DIR_ASC = 'asc';
@@ -11,16 +16,46 @@ class QueryBuilder
      * @var Builder
      */
     private $query;
+
+    /**
+     * @var string Sorting column.
+     */
     private $sortBy;
+
+    /**
+     * @var string Sorting direction.
+     */
     private $sortDir;
+
+    /**
+     * @var int Query offset.
+     */
     private $offset;
+
+    /**
+     * @var int Query limit.
+     */
     private $limit;
 
-    public function __construct(Builder $query)
+    /**
+     * Query setter.
+     *
+     * @param Builder $query
+     * @return $this
+     */
+    public function setQuery(Builder $query)
     {
         $this->query = $query;
+
+        return $this;
     }
 
+    /**
+     * Sorting column setter.
+     *
+     * @param string|null $sortBy
+     * @return $this
+     */
     public function setSortingColumn($sortBy = null)
     {
         $this->sortBy = $sortBy;
@@ -28,6 +63,12 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * Sorting direction setter.
+     *
+     * @param string|null $sortDir
+     * @return $this
+     */
     public function setSortingDirection($sortDir = null)
     {
         $sortDir = strtolower($sortDir);
@@ -41,6 +82,13 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * Offset setter.
+     *
+     * @param int|null $page
+     * @param int|null $limit
+     * @return $this
+     */
     public function setOffset($page = null, $limit = null)
     {
         $this->offset = (int)$page * (int)$limit;
@@ -48,6 +96,12 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * Query limit setter.
+     *
+     * @param int $limit
+     * @return $this
+     */
     public function setLimit($limit)
     {
         $this->limit = (int)$limit;
@@ -55,6 +109,11 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * Builds and returns the query.
+     *
+     * @return Builder
+     */
     public function getQuery()
     {
         $this->makeSorting()
@@ -63,7 +122,13 @@ class QueryBuilder
         return $this->query;
     }
 
-    protected function makeSorting(){
+    /**
+     * Sets the sorting in the query.
+     *
+     * @return $this
+     */
+    protected function makeSorting()
+    {
         if ($this->sortBy && $this->sortDir) {
             $this->query->orderBy($this->sortBy, $this->sortDir);
         }
@@ -71,7 +136,13 @@ class QueryBuilder
         return $this;
     }
 
-    protected function makeLimit(){
+    /**
+     * Sets the limit in the query.
+     *
+     * @return $this
+     */
+    protected function makeLimit()
+    {
         $this->query->take($this->limit);
 
         if ($this->offset) {
@@ -79,5 +150,15 @@ class QueryBuilder
         }
 
         return $this;
+    }
+
+    /**
+     * Query getter.
+     *
+     * @return Builder
+     */
+    public function getRawQuery()
+    {
+        return $this->query;
     }
 }
