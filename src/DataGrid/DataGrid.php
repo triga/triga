@@ -76,6 +76,8 @@ class DataGrid
 
         $this->applyFilters();
 
+        return \View::make('data_grid.data_grid');
+
         $query = $this->queryBuilder->getQuery();
         var_dump($query->toSql());
         die;
