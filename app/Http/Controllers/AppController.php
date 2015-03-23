@@ -17,9 +17,9 @@ class AppController extends Controller
         $this->view = $view;
     }
 
-    protected function render()
+    protected function render(array $vars = null)
     {
-        return $this->view->make($this->layout);
+        return $this->view->make($this->layout, $vars);
     }
 
 }

@@ -20,14 +20,9 @@ class UserController extends AppController {
             $query->where('email', '=', $value);
         });
 
-        $dataGrid->filter('name', function($query, $value) {
-            $query->where(function ($q) use ($value) {
-                $q->where('name', '=', $value);
-                $q->orWhere('lastname', '=', $value);
-            });
-        });
-
-        $dataGrid->make();
+        return $this->render([
+            'middle' => $dataGrid->make(),
+        ]);
 	}
 
 }
