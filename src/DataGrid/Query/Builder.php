@@ -1,13 +1,13 @@
-<?php namespace Source\DataGrid;
+<?php namespace Source\DataGrid\Query;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Builder as Query;
 
 /**
  * DataGrid query builder. Responsible for building the query to be executed.
  *
- * @package Source\DataGrid
+ * @package Source\DataGrid\Query
  */
-class QueryBuilder
+class Builder
 {
     const SORT_DIR_ASC = 'asc';
     const SORT_DIR_DESC = 'desc';
@@ -35,15 +35,20 @@ class QueryBuilder
     /**
      * @var int Query limit.
      */
-    private $limit;
+    private $limit = 20;
+
+    /**
+     * @var array Filters to be applied to the query.
+     */
+    private $filters = [];
 
     /**
      * Query setter.
      *
-     * @param Builder $query
+     * @param Query $query
      * @return $this
      */
-    public function setQuery(Builder $query)
+    public function setQuery(Query $query)
     {
         $this->query = $query;
 
@@ -86,12 +91,11 @@ class QueryBuilder
      * Offset setter.
      *
      * @param int|null $page
-     * @param int|null $limit
      * @return $this
      */
-    public function setOffset($page = null, $limit = null)
+    public function setOffset($page = null)
     {
-        $this->offset = (int)$page * (int)$limit;
+        $this->offset = (int)$page * (int)$this->limit;
 
         return $this;
     }
@@ -160,5 +164,40 @@ class QueryBuilder
     public function getRawQuery()
     {
         return $this->query;
+    }
+
+    /**
+     * Registers a query filter.
+     *
+     * @param string $field Field (table column) name.
+     * @param callable $query
+     * @return $this
+     */
+    public function setFilter($field, callable $query)
+    {
+        $this->filters[$field] = $query;
+
+        return $this;
+    }
+
+    /**
+     * Returns registered filters;
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * Applies a filter to the query with the given field value.
+     *
+     * @param string $field
+     * @param mixed $value
+     */
+    public function applyFilter($field, $value)
+    {
+        $this->filters[$field]($this->query, $value);
     }
 }
