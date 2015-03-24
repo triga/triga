@@ -2,9 +2,17 @@
 
 use Illuminate\View\Factory as ViewFactory;
 
+/**
+ * Base AppController.
+ *
+ * @package Triga\Http\Controllers
+ */
 class AppController extends Controller
 {
 
+    /**
+     * @var string Layout to be used.
+     */
     protected $layout = '_layouts.base';
 
     /**
@@ -17,6 +25,12 @@ class AppController extends Controller
         $this->view = $view;
     }
 
+    /**
+     * Renders the layout using passed vars.
+     *
+     * @param array $vars
+     * @return \Illuminate\View\View
+     */
     protected function render(array $vars = null)
     {
         return $this->view->make($this->layout, $vars);
