@@ -106,7 +106,7 @@ class Builder
      * @param int $limit
      * @return $this
      */
-    public function setLimit($limit)
+    public function setLimit($limit = 20)
     {
         $this->limit = (int)$limit;
 

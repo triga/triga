@@ -1,7 +1,6 @@
 <?php namespace Source\DataGrid;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Builder as Query;
 
 /**
  * DataGrid main class.
@@ -12,40 +11,24 @@ class DataGrid
 {
 
     /**
-     * @var Request
+     * @var Builder
      */
-    private $request;
+    private $builder;
 
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
-
-    /**
-     * @var int Query limit.
-     */
-    private $limit = 20;
-
-    /**
-     * @var array Filters to be applied to the query.
-     */
-    private $filters = [];
-
-    public function __construct(Request $request, QueryBuilder $queryBuilder)
+    public function __construct(Builder $builder)
     {
-        $this->request = $request;
-        $this->queryBuilder = $queryBuilder;
+        $this->builder = $builder;
     }
 
     /**
      * Query builder setter.
      *
-     * @param Builder $query
+     * @param Query $query
      * @return $this
      */
-    public function query(Builder $query)
+    public function query(Query $query)
     {
-        $this->queryBuilder->setQuery($query);
+        $this->builder->setQuery($query);
 
         return $this;
     }
@@ -56,9 +39,9 @@ class DataGrid
      * @param int $limit
      * @return $this
      */
-    public function setLimit($limit = 20)
+    public function setLimit($limit = null)
     {
-        $this->limit = (int)$limit;
+        $this->builder->getQueryBuilder()->setLimit((int)$limit);
 
         return $this;
     }
@@ -68,19 +51,11 @@ class DataGrid
      */
     public function make()
     {
-        $this->queryBuilder
-            ->setSortingColumn($this->request->get('order_by'))
-            ->setSortingDirection($this->request->get('order_dir'))
-            ->setOffset($this->request->get('page'), $this->limit)
-            ->setLimit($this->limit);
+        $this->builder->buildQuery();
 
-        $this->applyFilters();
+        var_dump($this->builder->getQueryBuilder()->getQuery()->toSql());
 
         return \View::make('data_grid.data_grid');
-
-        $query = $this->queryBuilder->getQuery();
-        var_dump($query->toSql());
-        die;
     }
 
     /**
@@ -92,22 +67,9 @@ class DataGrid
      */
     public function filter($field, callable $query)
     {
-        $this->filters[$field] = $query;
+        $this->builder->getQueryBuilder()->setFilter($field, $query);
 
         return $this;
     }
 
-    /**
-     * Apples the filters.
-     */
-    protected function applyFilters()
-    {
-        foreach ($this->filters as $field => $filter) {
-            $request_value = $this->request->get($field);
-
-            if ($request_value) {
-                $filter($this->queryBuilder->getRawQuery(), $request_value);
-            }
-        }
-    }
 }
