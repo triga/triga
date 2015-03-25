@@ -13,7 +13,7 @@ class Builder
     const SORT_DIR_DESC = 'desc';
 
     /**
-     * @var Builder
+     * @var Query
      */
     private $query;
 
@@ -116,7 +116,7 @@ class Builder
     /**
      * Builds and returns the query.
      *
-     * @return Builder
+     * @return Query
      */
     public function getQuery()
     {
@@ -159,7 +159,7 @@ class Builder
     /**
      * Query getter.
      *
-     * @return Builder
+     * @return Query
      */
     public function getRawQuery()
     {
@@ -199,5 +199,15 @@ class Builder
     public function applyFilter($field, $value)
     {
         $this->filters[$field]($this->query, $value);
+    }
+
+    /**
+     * Returns an array of columns fetched by the query.
+     *
+     * @return array
+     */
+    public function getColumns()
+    {
+        return $this->query->columns;
     }
 }

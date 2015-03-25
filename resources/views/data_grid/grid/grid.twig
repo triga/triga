@@ -1,0 +1,26 @@
+<table>
+    <thead>
+        <tr>
+
+            {% for column in columns %}
+                {% include 'data_grid.grid.column' with {'column': column} %}
+            {% endfor %}
+
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for entry in data %}
+
+            <tr>
+
+                {% for column in columns %}
+                    {% include 'data_grid.grid.cell' with {'value': attribute(entry, column)} %}
+                {% endfor %}
+
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>

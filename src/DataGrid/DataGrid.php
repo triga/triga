@@ -55,7 +55,12 @@ class DataGrid
 
         var_dump($this->builder->getQueryBuilder()->getQuery()->toSql());
 
-        return \View::make('data_grid.data_grid');
+        return \View::make('data_grid.data_grid', [
+            'grid' => \View::make('data_grid.grid.grid', [
+                'columns' => $this->builder->getQueryBuilder()->getColumns(),
+                'data' => $this->builder->getQueryBuilder()->getQuery()->get(),
+            ]),
+        ]);
     }
 
     /**
