@@ -210,4 +210,13 @@ class Builder
     {
         return $this->query->columns;
     }
+
+    /**
+     * Returns the query results.
+     *
+     * @return array
+     */
+    public function getResults(){
+        return $this->query->get();
+    }
 }

@@ -1,6 +1,7 @@
 <?php namespace Source\DataGrid;
 
 use Illuminate\Database\Query\Builder as Query;
+use Source\DataGrid\View\Builder as ViewBuilder;
 
 /**
  * DataGrid main class.
@@ -47,20 +48,16 @@ class DataGrid
     }
 
     /**
-     * Builds the query.
+     * Builds the DataGrid.
      */
     public function make()
     {
+        // Build everything
         $this->builder->buildQuery();
 
         var_dump($this->builder->getQueryBuilder()->getQuery()->toSql());
 
-        return \View::make('data_grid.data_grid', [
-            'grid' => \View::make('data_grid.grid.grid', [
-                'columns' => $this->builder->getQueryBuilder()->getColumns(),
-                'data' => $this->builder->getQueryBuilder()->getQuery()->get(),
-            ]),
-        ]);
+        return $this->getView();
     }
 
     /**
@@ -75,6 +72,18 @@ class DataGrid
         $this->builder->getQueryBuilder()->setFilter($field, $query);
 
         return $this;
+    }
+
+    /**
+     * Returns the whole DataGrid view.
+     *
+     * @return \Illuminate\View\View
+     */
+    protected function getView(){
+        return (new ViewBuilder)->setDataForGrid([
+            'columns' => $this->builder->getQueryBuilder()->getColumns(),
+            'data' => $this->builder->getQueryBuilder()->getResults(),
+        ])->build();
     }
 
 }
