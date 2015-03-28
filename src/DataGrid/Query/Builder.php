@@ -43,6 +43,16 @@ class Builder
     private $filters = [];
 
     /**
+     * @var null|array Query resutls.
+     */
+    private $results = null;
+
+    /**
+     * @var int Number of total results, without pagination.
+     */
+    private $totalResults;
+
+    /**
      * Query setter.
      *
      * @param Query $query
@@ -106,11 +116,23 @@ class Builder
      * @param int $limit
      * @return $this
      */
-    public function setLimit($limit = 20)
+    public function setLimit($limit = null)
     {
-        $this->limit = (int)$limit;
+        if (false === empty($limit)) {
+            $this->limit = (int)$limit;
+        }
 
         return $this;
+    }
+
+    /**
+     * Query limit getter.
+     *
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
     }
 
     /**
@@ -120,6 +142,10 @@ class Builder
      */
     public function getQuery()
     {
+        if (true === empty($this->totalResults)) {
+            $this->countResults();
+        }
+
         $this->makeSorting()
             ->makeLimit();
 
@@ -216,7 +242,30 @@ class Builder
      *
      * @return array
      */
-    public function getResults(){
-        return $this->query->get();
+    public function getResults()
+    {
+        if (true === empty($this->results)) {
+            $this->results = $this->query->get();
+        }
+
+        return $this->results;
+    }
+
+    /**
+     * Returns the number of total results (without pagination).
+     *
+     * @return int
+     */
+    public function getTotalResultCount()
+    {
+        return $this->totalResults;
+    }
+
+    /**
+     * Sets the total results count.
+     */
+    public function countResults()
+    {
+        $this->totalResults = count($this->query->get());
     }
 }

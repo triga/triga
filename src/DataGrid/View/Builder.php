@@ -1,18 +1,21 @@
 <?php namespace Source\DataGrid\View;
 
 use Source\DataGrid\View\Partial\Grid;
+use Source\DataGrid\View\Partial\Pagination;
 
 /**
  * DataGrid view builder.
  *
  * @package Source\DataGrid\View
  */
-class Builder {
+class Builder
+{
 
     /**
      * Partial types.
      */
     const TYPE_GRID = 'grid';
+    const TYPE_PAGINATION = 'pagination';
 
     /**
      * @var array View data to be passed to partial builders.
@@ -25,8 +28,22 @@ class Builder {
      * @param array $data
      * @return $this
      */
-    public function setDataForGrid(array $data = null){
+    public function setDataForGrid(array $data = null)
+    {
         $this->setViewData(self::TYPE_GRID, $data);
+
+        return $this;
+    }
+
+    /**
+     * Sets data for the Pagination partial builder.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setDataForPagination(array $data = null)
+    {
+        $this->setViewData(self::TYPE_PAGINATION, $data);
 
         return $this;
     }
@@ -37,7 +54,8 @@ class Builder {
      * @param string $viewType
      * @param array $data
      */
-    protected function setViewData($viewType, array $data = null){
+    protected function setViewData($viewType, array $data = null)
+    {
         $this->data[$viewType] = $data;
     }
 
@@ -46,9 +64,11 @@ class Builder {
      *
      * @return mixed
      */
-    public function build(){
+    public function build()
+    {
         return \View::make('data_grid.data_grid', [
             self::TYPE_GRID => (new Grid)->build($this->data[self::TYPE_GRID]),
+            self::TYPE_PAGINATION => (new Pagination)->build($this->data[self::TYPE_PAGINATION]),
         ]);
     }
 

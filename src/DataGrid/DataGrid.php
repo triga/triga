@@ -54,8 +54,7 @@ class DataGrid
     {
         // Build everything
         $this->builder->buildQuery();
-
-        var_dump($this->builder->getQueryBuilder()->getQuery()->toSql());
+        $this->builder->buildPagination();
 
         return $this->getView();
     }
@@ -80,10 +79,18 @@ class DataGrid
      * @return \Illuminate\View\View
      */
     protected function getView(){
-        return (new ViewBuilder)->setDataForGrid([
+        $viewBuilder = new ViewBuilder;
+
+        $viewBuilder->setDataForGrid([
             'columns' => $this->builder->getQueryBuilder()->getColumns(),
             'data' => $this->builder->getQueryBuilder()->getResults(),
-        ])->build();
+        ]);
+
+        $viewBuilder->setDataForPagination([
+            'view' => $this->builder->getPaginationBuilder()->render(),
+        ]);
+
+        return $viewBuilder->build();
     }
 
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Database\Query\Builder as Query;
 use Source\DataGrid\Query\Builder as QueryBuilder;
+use Source\DataGrid\Pagination\Builder as PaginationBuilder;
 
 /**
  * DataGrid builder, responsible for binding everything and making it work together.
@@ -22,10 +23,16 @@ class Builder
      */
     private $queryBuilder;
 
-    public function __construct(Request $request, QueryBuilder $queryBuilder)
+    /**
+     * @var PaginationBuilder
+     */
+    private $paginationBuilder;
+
+    public function __construct(Request $request, QueryBuilder $queryBuilder, PaginationBuilder $paginationBuilder)
     {
         $this->request = $request;
         $this->queryBuilder = $queryBuilder;
+        $this->paginationBuilder = $paginationBuilder;
     }
 
     /**
@@ -46,9 +53,20 @@ class Builder
         $this->queryBuilder
             ->setSortingColumn($this->request->get('order_by'))
             ->setSortingDirection($this->request->get('order_dir'))
-            ->setOffset($this->request->get('page'));
+            ->setOffset($this->request->get('page'))
+            ->setLimit($this->request->get('limit'))
+            ->countResults();
 
         $this->applyFilters();
+    }
+
+    /**
+     * Builds the pagination.
+     */
+    public function buildPagination()
+    {
+        $this->paginationBuilder
+            ->build($this->queryBuilder);
     }
 
     /**
@@ -77,6 +95,16 @@ class Builder
     public function getQueryBuilder()
     {
         return $this->queryBuilder;
+    }
+
+    /**
+     * Returns the PaginationBuilder instance.
+     *
+     * @return PaginationBuilder
+     */
+    public function getPaginationBuilder()
+    {
+        return $this->paginationBuilder;
     }
 
 }
