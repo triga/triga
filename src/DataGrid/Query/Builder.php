@@ -245,7 +245,7 @@ class Builder
     public function getResults()
     {
         if (true === empty($this->results)) {
-            $this->results = $this->query->get();
+            $this->results = $this->getQuery()->get();
         }
 
         return $this->results;

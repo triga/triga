@@ -1,6 +1,7 @@
 <?php namespace Source\DataGrid;
 
 use Illuminate\Database\Query\Builder as Query;
+use Source\DataGrid\Url;
 use Source\DataGrid\View\Builder as ViewBuilder;
 
 /**
@@ -79,7 +80,8 @@ class DataGrid
      * @return \Illuminate\View\View
      */
     protected function getView(){
-        $viewBuilder = new ViewBuilder;
+        $urlHelper = new Url($this->builder->getRequest(), $this->builder->getQueryBuilder()->getFilters());
+        $viewBuilder = new ViewBuilder($urlHelper);
 
         $viewBuilder->setDataForGrid([
             'columns' => $this->builder->getQueryBuilder()->getColumns(),

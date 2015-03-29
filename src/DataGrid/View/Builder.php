@@ -1,5 +1,6 @@
 <?php namespace Source\DataGrid\View;
 
+use Source\DataGrid\Url;
 use Source\DataGrid\View\Partial\Grid;
 use Source\DataGrid\View\Partial\Pagination;
 
@@ -21,6 +22,16 @@ class Builder
      * @var array View data to be passed to partial builders.
      */
     protected $data = [];
+
+    /**
+     * @var Url URL helper.
+     */
+    private $url;
+
+    public function __construct(Url $url)
+    {
+        $this->url = $url;
+    }
 
     /**
      * Sets data for the Grid partial builder.
@@ -67,7 +78,7 @@ class Builder
     public function build()
     {
         return \View::make('data_grid.data_grid', [
-            self::TYPE_GRID => (new Grid)->build($this->data[self::TYPE_GRID]),
+            self::TYPE_GRID => (new Grid($this->url))->build($this->data[self::TYPE_GRID]),
             self::TYPE_PAGINATION => (new Pagination)->build($this->data[self::TYPE_PAGINATION]),
         ]);
     }

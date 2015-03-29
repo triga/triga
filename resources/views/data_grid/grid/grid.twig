@@ -1,9 +1,9 @@
-<table>
+<table class="table table-striped table-hover table-condensed">
     <thead>
         <tr>
 
             {% for column in columns %}
-                {% include 'data_grid.grid.column' with {'column': column} %}
+                {% include 'data_grid.grid.column' with {'column': column, 'order': order} %}
             {% endfor %}
 
         </tr>

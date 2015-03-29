@@ -1,3 +1,7 @@
 <th>
-    {{ column }}
+    <span>
+        {{ column }}
+    </span>
+    <a class="order-dir order-desc" href="{{ order[column].desc }}">[DESC]</a>
+    <a class="order-dir order-asc" href="{{ order[column].asc }}">[ASC]</a>
 </th>

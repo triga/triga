@@ -87,6 +87,11 @@ class Builder
         }
     }
 
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
     /**
      * Returns the QueryBuilder instance.
      *
