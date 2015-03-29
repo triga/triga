@@ -1,22 +1,24 @@
 <!DOCTYPE HTML>
 <html lang="{{ config_get('app.locale') }}">
 <head>
-  <title>Triga</title>
+    <title>Triga</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 </head>
 <body class="lang-{{ config_get('app.locale') }}">
 
 {{ head }}
 
 <div>
-  <div>
     <div>
-      {{ middle }}
+        <div>
+            {{ middle }}
+        </div>
     </div>
-  </div>
 
 </div>
 
 {{ footer }}
 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
 </html>
