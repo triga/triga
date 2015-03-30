@@ -28,16 +28,31 @@ class Grid
      */
     public function build(array $data)
     {
+        return \View::make('data_grid.grid.grid', array_merge($data, [
+            'order' => $this->getOrderUrls($data['columns']),
+            'order_by' => $this->url->getOrderBy(),
+            'order_dir' => $this->url->getOrderDir(),
+        ]));
+    }
+
+    /**
+     * Returns URLs used to sort the results.
+     *
+     * @param array $columns
+     * @return array
+     */
+    protected function getOrderUrls($columns)
+    {
         $order_urls = [];
 
-        foreach ($data['columns'] as $column) {
+        foreach ($columns as $column) {
             $order_urls[$column] = [
                 'asc' => $this->url->getWithOrder($column, 'asc'),
                 'desc' => $this->url->getWithOrder($column, 'desc'),
             ];
         }
 
-        return \View::make('data_grid.grid.grid', array_merge($data, array('order' => $order_urls)));
+        return $order_urls;
     }
 
 }

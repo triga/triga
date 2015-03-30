@@ -37,14 +37,35 @@ class Url
      * @param string $orderDir
      * @return string
      */
-    public function getWithOrder($orderBy, $orderDir){
+    public function getWithOrder($orderBy, $orderDir)
+    {
         $query = http_build_query(array_merge(
             $this->filters,
             ['order_by' => $orderBy, 'order_dir' => $orderDir],
             ['limit' => $this->request->get('limit'), 'page' => $this->request->get('page')]
         ));
 
-        return $this->request->url().'/?'.$query;
+        return $this->request->url() . '/?' . $query;
+    }
+
+    /**
+     * Returns "order by" column.
+     *
+     * @return string|null
+     */
+    public function getOrderBy()
+    {
+        return $this->request->get('order_by');
+    }
+
+    /**
+     * Returns the direction of sorting.
+     *
+     * @return string|null
+     */
+    public function getOrderDir()
+    {
+        return $this->request->get('order_dir');
     }
 
 }
