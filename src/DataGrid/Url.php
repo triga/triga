@@ -40,7 +40,7 @@ class Url
     public function getWithOrder($orderBy, $orderDir)
     {
         $query = http_build_query(array_merge(
-            $this->filters,
+            $this->getFilterValues(),
             ['order_by' => $orderBy, 'order_dir' => $orderDir],
             ['limit' => $this->request->get('limit'), 'page' => $this->request->get('page')]
         ));
@@ -66,6 +66,16 @@ class Url
     public function getOrderDir()
     {
         return $this->request->get('order_dir');
+    }
+
+    /**
+     * Returns filters with its values.
+     *
+     * @return array
+     */
+    public function getFilterValues()
+    {
+        return $this->request->only(array_keys($this->filters));
     }
 
 }
