@@ -20,6 +20,8 @@ class UserController extends AppController {
             $query->where('email', '=', $value);
         });
 
+        $dataGrid->useFilterView('user.data_grid.filter');
+
         return $this->render([
             'middle' => $dataGrid->make(),
         ]);

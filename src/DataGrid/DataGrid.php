@@ -1,7 +1,7 @@
 <?php namespace Source\DataGrid;
 
 use Illuminate\Database\Query\Builder as Query;
-use Source\DataGrid\Url;
+use Source\DataGrid\Url as URLHelper;
 use Source\DataGrid\View\Builder as ViewBuilder;
 
 /**
@@ -16,6 +16,11 @@ class DataGrid
      * @var Builder
      */
     private $builder;
+
+    /**
+     * @var string Filter view filename.
+     */
+    private $filterViewName;
 
     public function __construct(Builder $builder)
     {
@@ -79,8 +84,9 @@ class DataGrid
      *
      * @return \Illuminate\View\View
      */
-    protected function getView(){
-        $urlHelper = new Url($this->builder->getRequest(), $this->builder->getQueryBuilder()->getFilters());
+    protected function getView()
+    {
+        $urlHelper = new URLHelper($this->builder->getRequest(), $this->builder->getQueryBuilder()->getFilters());
         $viewBuilder = new ViewBuilder($urlHelper);
 
         $viewBuilder->setDataForGrid([
@@ -92,7 +98,24 @@ class DataGrid
             'view' => $this->builder->getPaginationBuilder()->render(),
         ]);
 
+        $viewBuilder->setDataForFilter([
+            'filename' => $this->filterViewName,
+        ]);
+
         return $viewBuilder->build();
+    }
+
+    /**
+     * Registers the path to the view that will be used to display the filter form.
+     *
+     * @param string $filename
+     * @return $this
+     */
+    public function useFilterView($filename)
+    {
+        $this->filterViewName = $filename;
+
+        return $this;
     }
 
 }

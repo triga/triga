@@ -3,6 +3,7 @@
 use Source\DataGrid\Url;
 use Source\DataGrid\View\Partial\Grid;
 use Source\DataGrid\View\Partial\Pagination;
+use Source\DataGrid\View\Partial\Filter;
 
 /**
  * DataGrid view builder.
@@ -17,6 +18,7 @@ class Builder
      */
     const TYPE_GRID = 'grid';
     const TYPE_PAGINATION = 'pagination';
+    const TYPE_FILTER = 'filter';
 
     /**
      * @var array View data to be passed to partial builders.
@@ -60,6 +62,19 @@ class Builder
     }
 
     /**
+     * Sets data for the Filter partial builder.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setDataForFilter(array $data = null)
+    {
+        $this->setViewData(self::TYPE_FILTER, $data);
+
+        return $this;
+    }
+
+    /**
      * Sets view data for a specific partial.
      *
      * @param string $viewType
@@ -80,6 +95,7 @@ class Builder
         return \View::make('data_grid.data_grid', [
             self::TYPE_GRID => (new Grid($this->url))->build($this->data[self::TYPE_GRID]),
             self::TYPE_PAGINATION => (new Pagination)->build($this->data[self::TYPE_PAGINATION]),
+            self::TYPE_FILTER => (new Filter)->build($this->data[self::TYPE_FILTER]),
         ]);
     }
 
